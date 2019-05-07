@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+setup_ubuntu () {
+
+echo "Seting up Ubuntu"
 if ! type "debmake" > /dev/null; then
     sudo apt-get install -y debmake
 fi
@@ -34,6 +37,14 @@ else
     cd ..
 fi
 
+if [ ! -d "live_img" ]; then
+    git clone --depth=1 https://github.com/marcelarosalesj/live_img.git
+else
+    echo "Updating live_img"
+    cd live_img/ && git pull
+    cd ..
+fi
+
 if [ ! -d "linuxbuilder" ] ; then
     git clone --depth=1 https://github.com/VictorRodriguez/linuxbuilder.git
 else
@@ -42,12 +53,25 @@ else
     cd ..
 fi
 
-if [ ! -d "live_img" ]; then
-    git clone --depth=1 https://github.com/marcelarosalesj/live_img.git
+}
+
+setup_centos(){
+    echo "Seting up centos"
+
+    if ! type "mock" > /dev/null; then
+    yum -y --setopt="tsflags=nodocs" update
+    yum -y --setopt="tsflags=nodocs" install epel-release mock rpm-sign expect rpm-build
+    yum clean all
+    rm -rf /var/cache/yum/
+    chmod g+w /etc/mock/*.cfg
+    fi
+    sudo usermod -aG mock $USER
+}
+
+if [ -f /etc/centos-release ]; then
+    setup_centos
 else
-    echo "Updating live_img"
-    cd live_img/ && git pull
-    cd ..
+    setup_ubuntu
 fi
 
 # clone source code repos on specific branches
