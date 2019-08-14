@@ -17,22 +17,24 @@ build:download
 	docker run --privileged -e MOCK_CONFIG=$(MOCK_CONFIG) \
 		-e SOURCE_RPM=/rpmbuild/$(PKG) \
 		-v $(TMP_MOUNT):/rpmbuild $(IMAGE_NAME)
+	@echo "RPMs generated at $(TMP_MOUNT)/output/"
 test:download
 	@echo $(PKG)
 	@echo $(URL)
 	docker run --privileged -e MOCK_CONFIG=$(MOCK_CONFIG) \
 		-e SOURCE_RPM=/rpmbuild/$(PKG) \
 		-v $(TMP_MOUNT):/rpmbuild $(IMAGE_NAME)
+	@echo "RPMs generated at $(TMP_MOUNT)/output/"
 debug:
 	@echo $(PKG)
 	@echo $(URL)
 	docker run --privileged -e MOCK_CONFIG=$(MOCK_CONFIG) \
 		-e SOURCE_RPM=/rpmbuild/$(PKG) \
 		-v $(TMP_MOUNT):/rpmbuild -it $(IMAGE_NAME) /bin/bash
+	@echo "RPMs generated at $(TMP_MOUNT)/output/"
 clean:
-	rm -rf /tmp/rpmbuild/output
+	rm -rf $(TMP_MOUNT)/output
 
 download:
 	@if test -f $(PATH_TO_FILE); then echo exists; else wget $(URL) -P $(TMP_MOUNT); fi
-
 
