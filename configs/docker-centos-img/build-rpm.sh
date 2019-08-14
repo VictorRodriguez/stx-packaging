@@ -10,6 +10,8 @@ MOCK_DEFINES=($MOCK_DEFINES) # convert strings into array items
 DEF_SIZE=${#MOCK_DEFINES[@]}
 
 build_cmd () {
+
+echo "cp -rf /output/ /rpmbuild 2>/dev/null" >> $OUTPUT_FOLDER/script-test.sh
 chmod 755 $OUTPUT_FOLDER/script-test.sh
 runuser -l builder -c "sh $OUTPUT_FOLDER/script-test.sh"
 }
