@@ -9,7 +9,7 @@ export $(MOUNT)
 
 all:
 	docker build -t $(IMAGE_NAME) .
-upstream-pkg:
+srpm:
 	@echo $(SRPM)
 	@echo $(PATH_TO_FILE)
 	@if test -f $(PATH_TO_FILE); then echo SRPM exists; else echo Error: No SRPM && exit 1; fi
