@@ -3,17 +3,16 @@
 set -e
 MOCK_BIN=/usr/bin/mock
 MOCK_CONF_FOLDER=/etc/mock
-MOUNT_POINT=$GITHUB_WORKSPACE
-OUTPUT_FOLDER=$MOUNT_POINT/output
-CACHE_FOLDER=$MOUNT_POINT/cache/mock
+OUTPUT_FOLDER=/rpmbuild/output
+CACHE_FOLDER=/rpmbuild/cache/mock
 MOCK_DEFINES=($MOCK_DEFINES) # convert strings into array items
 DEF_SIZE=${#MOCK_DEFINES[@]}
 
 build_cmd () {
 
-echo "cp -rf /output/ /rpmbuild 2>/dev/null" >> $OUTPUT_FOLDER/script-test.sh
+# echo "cp -rf /output/ /rpmbuild 2>/dev/null" >> $OUTPUT_FOLDER/script-test.sh
 chmod 755 $OUTPUT_FOLDER/script-test.sh
-runuser -l builder -c "sh $OUTPUT_FOLDER/script-test.sh"
+runuser -l builder -c "sh -x  $OUTPUT_FOLDER/script-test.sh"
 }
 
 if [ $DEF_SIZE -gt 0 ];
@@ -119,6 +118,6 @@ else
 	echo "No RPMs signature requested"
 fi
 
-cp -rf /output/ /rpmbuild 2>/dev/null
+# cp -rf /output/ /rpmbuild 2>/dev/null
 echo "Build finished. Check results inside the mounted volume folder."
 echo $OUTPUT_FOLDER
